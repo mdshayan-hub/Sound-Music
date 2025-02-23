@@ -27,7 +27,10 @@ class AuthController extends Controller
             }
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt([
+            'email' => $request->email, 
+            'password' => $request->password
+            ])) {
             return redirect()->intended('/home'); // Redirect to home after login
         }
     
@@ -53,9 +56,9 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // Validate Form
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6'
+            'password' => 'required'
         ]);
 
         // Admin login credentials
@@ -92,7 +95,7 @@ public function register(Request $request)
         $request->user_image->move(public_path('storage/users'), $imageName);
     }
 
-    $role = $request->role ?? 'User'; // Default 'User' if role is missing
+    $role = $request->role ?? 'user'; // Default 'User' if role is missing
 
 
     User::create([
